@@ -6,11 +6,15 @@ let Task = {
         <div class="task" :class="{ 'task--done': task.done }">
             {{ task.body }}
             <a href="#" @click.prevent="toggleDone(task.id)">mark as {{ task.done ? 'not done' : 'done' }}</a>
+            <a href="#" @click.prevent="deleteTask(task.id)">delete</a>
         </div>
     `,
     methods: {
         toggleDone (taskId) {
             bus.$emit('task:toggleDone', taskId)
+        },
+        deleteTask (taskId) {
+            bus.$emit('task:delete', taskId)
         }
     }
 }
@@ -46,11 +50,20 @@ let Tasks = {
 
                 return task                                
             });
+        },
+        deleteTask (taskId) {
+            this.tasks = this.tasks.filter((task) => {
+                return task.id !== taskId
+            });
         }
     },
     mounted () {
         bus.$on('task:toggleDone', (taskId) => {
             this.toggleDone(taskId)
+        });
+
+        bus.$on('task:delete', (taskId) => {
+            this.deleteTask(taskId)
         });
     }
 }
