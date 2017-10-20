@@ -1,14 +1,16 @@
+let bus = new Vue();
+
 let Task = {
     props: ['task'],
     template: `
         <div class="task" :class="{ 'task--done': task.done }">
             {{ task.body }}
-            <a href="#" @click.prevent="toggleDone">mark as {{ task.done ? 'not done' : 'done' }}</a>
+            <a href="#" @click.prevent="toggleDone(task.id)">mark as {{ task.done ? 'not done' : 'done' }}</a>
         </div>
     `,
     methods: {
-        toggleDone () {
-            this.task.done = !this.task.done
+        toggleDone (taskId) {
+            bus.$emit('task:toggleDone', taskId)
         }
     }
 }
@@ -34,6 +36,22 @@ let Tasks = {
     `,
     components: {
         'task': Task
+    },
+    methods: {
+        toggleDone (taskId) {
+            this.tasks = this.tasks.map((task) => {
+                if (task.id === taskId) {
+                    task.done = !task.done
+                }
+
+                return task                                
+            });
+        }
+    },
+    mounted () {
+        bus.$on('task:toggleDone', (taskId) => {
+            this.toggleDone(taskId)
+        });
     }
 }
 
