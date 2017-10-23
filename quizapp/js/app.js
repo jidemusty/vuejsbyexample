@@ -62,7 +62,8 @@ let Quiz = {
         return {
             questions: [],
             currentQuestion: null,
-            answeredQuestions: []
+            answeredQuestions: [],
+            currentQuestionNumber: 1
         }
     },
     mounted () {
@@ -74,21 +75,30 @@ let Quiz = {
     },
     template: `
         <div class="quiz">
+            <h4>Question {{ currentQuestionNumber }} of {{ questions.length }}</h4>
             <question
                 v-if="currentQuestion"
                 :question="currentQuestion"
-                v-on:question:answered="storeAnswer"
+                v-on:question:answered="answered"
             ></question>
 
             {{ answeredQuestions }}
         </div>
     `,
     methods: {
+        answered (question, answer) {
+            this.storeAnswer(question, answer)
+            this.setNextQuestion()
+        },
         storeAnswer (question, answer) {
             this.answeredQuestions.push({
                 question: question,
                 answer: answer
             })
+        },
+        setNextQuestion () {
+            this.currentQuestionNumber++
+            this.currentQuestion = this.questions[this.currentQuestionNumber - 1]
         }
     }
 }
