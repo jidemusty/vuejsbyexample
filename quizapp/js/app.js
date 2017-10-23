@@ -63,7 +63,8 @@ let Quiz = {
             questions: [],
             currentQuestion: null,
             answeredQuestions: [],
-            currentQuestionNumber: 1
+            currentQuestionNumber: 1,
+            showResults: false
         }
     },
     mounted () {
@@ -75,14 +76,17 @@ let Quiz = {
     },
     template: `
         <div class="quiz">
-            <h4>Question {{ currentQuestionNumber }} of {{ questions.length }}</h4>
-            <question
-                v-if="currentQuestion"
-                :question="currentQuestion"
-                v-on:question:answered="answered"
-            ></question>
-
-            {{ answeredQuestions }}
+            <template v-if="showResults">
+                Show Results
+            </template>
+            <template v-else>
+                <h4>Question {{ currentQuestionNumber }} of {{ questions.length }}</h4>
+                <question
+                    v-if="currentQuestion"
+                    :question="currentQuestion"
+                    v-on:question:answered="answered"
+                ></question>
+            </template>
         </div>
     `,
     methods: {
@@ -97,8 +101,16 @@ let Quiz = {
             })
         },
         setNextQuestion () {
+            if (this.allQuestionsAnswered()) {
+                this.showResults = true
+                return
+            }
+
             this.currentQuestionNumber++
             this.currentQuestion = this.questions[this.currentQuestionNumber - 1]
+        },
+        allQuestionsAnswered () {
+            return this.currentQuestionNumber === this.questions.length
         }
     }
 }
