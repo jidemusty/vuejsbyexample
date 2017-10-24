@@ -89,6 +89,7 @@ let Question = {
             this.answerChosen = answer
         },
         nextQuestion () {
+            this.showNext = false
             this.$emit('question:answered', this.question, this.answerChosen)
         }
     }
