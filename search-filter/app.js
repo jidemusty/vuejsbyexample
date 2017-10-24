@@ -26,9 +26,9 @@ let People = {
     },
     template: `
         <div class="people">
+
             <search v-model="query"></search>
 
-            {{ query }}
             <table v-if="people.length">
                 <thead>
                     <th><td>ID</td></th>
@@ -37,7 +37,7 @@ let People = {
                     <th><td>Email</td></th>
                 </thead>
                 <tbody>
-                    <tr v-for="person in people">
+                    <tr v-for="person in filteredPeople">
                         <td>{{ person.id }}</td>
                         <td>{{ person.name }}</td>
                         <td>{{ person.username }}</td>
@@ -48,6 +48,15 @@ let People = {
             <p v-else>No People</p>
         </div>
     `,
+    computed: {
+        filteredPeople () {
+            return this.people.filter((row) => {
+                return Object.keys(row).some((key) => {
+                    return String(row[key]).indexOf(this.query) > -1
+                })
+            })
+        }
+    },
     mounted () {
         axios.get('people.json')
             .then((response) => {
