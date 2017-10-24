@@ -1,11 +1,34 @@
-let People = {
+let Search = {
     data () {
         return {
-            people: []
+            query: ''
+        }
+    },
+    template: `
+        <input type="search" v-model="query" @input="changed">
+    `,
+    methods: {
+        changed () {
+            this.$emit('input', this.query)
+        }
+    }
+}
+
+let People = {
+    components: {
+        'search': Search
+    },
+    data () {
+        return {
+            people: [],
+            query: ''
         }
     },
     template: `
         <div class="people">
+            <search v-model="query"></search>
+
+            {{ query }}
             <table v-if="people.length">
                 <thead>
                     <th><td>ID</td></th>
