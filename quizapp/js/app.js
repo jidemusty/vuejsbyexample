@@ -1,3 +1,43 @@
+let Results = {
+    props: ["answeredQuestions"],
+    template: `
+        <div class="results">
+            <h2>Results</h2>
+            <p>You got {{ correctAnswerCount() }} out of {{ answeredQuestions.length }} questions correct</p>
+
+            <div class="results__item" v-for="answered in answeredQuestions">
+                <h3>{{ answered.question.title }}</h3>
+                <p>
+                    Your answer:
+                    <span
+                        :class="{
+                            'danger': !answered.answer.correct,
+                            'success': answered.answer.correct
+                        }"
+                    >{{ answered.answer.title }}
+                    </span>
+                </p>
+                <p v-if="!answered.answer.correct">
+                    Correct Answer: {{ getCorrectAnswers(answered.question).title }}
+                </p>
+            </div>
+        </div>
+
+    `,
+    methods: {
+        getCorrectAnswers (question) {
+            return question.answers.find((answer) => {
+                return answer.correct === true;
+            })
+        },
+        correctAnswerCount () {
+            return this.answeredQuestions.filter((answered) => {
+                return answered.answer.correct === true;
+            }).length
+        }
+    }
+}
+
 let Answer = {
     props: ['answer'],
     template: `
@@ -45,8 +85,8 @@ let Question = {
     `,
     methods: {
         answerClicked (answer) {
-            this.showNext = true;
-            this.answerChosen = answer;   
+            this.showNext = true
+            this.answerChosen = answer
         },
         nextQuestion () {
             this.$emit('question:answered', this.question, this.answerChosen)
@@ -56,7 +96,8 @@ let Question = {
 
 let Quiz = {
     components: {
-        'question': Question
+        'question': Question,
+        'results': Results
     },
     data () {
         return {
@@ -77,7 +118,7 @@ let Quiz = {
     template: `
         <div class="quiz">
             <template v-if="showResults">
-                Show Results
+                <results :answered-questions="answeredQuestions"></results>
             </template>
             <template v-else>
                 <h4>Question {{ currentQuestionNumber }} of {{ questions.length }}</h4>
