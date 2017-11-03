@@ -1,4 +1,13 @@
+let Editor = {
+    template:`
+        <textarea class="editor" rows="10" placeholder="Write a note"></textarea>
+    `
+}
+
 let Note = {
+    components: {
+        'editor': Editor
+    },
     props: [
         'noteObject'
     ],
@@ -11,13 +20,13 @@ let Note = {
     template: `
         <div class="note__wrapper">
             <div class="note__header">
-                <a href=# class="note">
+                <a href=# class="note" @click.prevent="open = !open">
                     <span>{{ note.body || 'Empty Note' }}</span>
                     <span>5 words</span>
                 </a>
                 <a v-if="open" href="#" class="note__delete">Delete note</a>
             </div>
-            <textarea v-if="open" class="editor" rows="10" placeholder="Write a note"></textarea>
+            <editor v-if="open"></editor>
         </div>
     `
 }
