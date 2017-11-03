@@ -19,14 +19,13 @@ body {
 }
 
 .note {
-    display: flex;
-    justify-content: space-between;
     background-color: #FFF;
     padding: 20px;
     border: 2px solid #e0e0e0;
     text-decoration: none;
     color: inherit;
     width: 100%;
+    border-bottom: 0;
 }
 
 .note__header {
@@ -40,5 +39,24 @@ body {
     text-decoration: none;
     text-align: center;
     border-left: 0;
-    color: inherit
+    color: inherit;
+    min-width: 150px;
+}
+
+.note__wrapper:last-child .note,
+.note__wrapper:last-child .editor {
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.editor {
+    width: 100%;
+    font: inherit;
+    border: 0;
+    outline: none;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-bottom: 0;
+    border-top: 0;
+    resize: vertical;
+    vertical-align: top;
 }
