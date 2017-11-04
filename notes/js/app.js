@@ -1,7 +1,27 @@
 let Editor = {
+    props:[
+        'noteObject'
+    ],
+    data () {
+        return {
+            note: this.noteObject
+        }
+    },
     template:`
-        <textarea class="editor" rows="10" placeholder="Write a note"></textarea>
-    `
+        <textarea 
+            class="editor" 
+            rows="10" 
+            placeholder="Write a note" 
+            v-model="note.body"
+            @input="update"
+            >
+        </textarea>
+    `,
+    methods: {
+        update () {
+            this.$emit('update')
+        }
+    }
 }
 
 let Note = {
@@ -26,9 +46,22 @@ let Note = {
                 </a>
                 <a v-if="open" href="#" class="note__delete">Delete note</a>
             </div>
-            <editor v-if="open"></editor>
+            <editor v-if="open" :note-object="note" v-on:update="saveNote"></editor>
         </div>
-    `
+    `,
+    methods: {
+        saveNote () {
+            let notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+            notes.map((note) => {
+                if (note.id === this.note.id) {
+                    note.body = this.note.body
+                }
+            })
+
+            localStorage.setItem('notes', JSON.stringify(notes));
+        }
+    }
 }
 
 let Notes = {
