@@ -53,7 +53,7 @@ let Note = {
                     <span>{{ note.body || 'Empty Note' }}</span>
                     <span>{{ wordCount }} words</span>
                 </a>
-                <a v-if="open" href="#" class="note__delete">Delete note</a>
+                <a v-if="open" href="#" class="note__delete" @click.prevent="deleteNote">Delete note</a>
             </div>
             <editor v-if="open" :note-object="note" v-on:update="saveNote"></editor>
         </div>
@@ -69,6 +69,9 @@ let Note = {
             })
 
             localStorage.setItem('notes', JSON.stringify(notes));
+        },
+        deleteNote () {
+            this.$emit('deleteNote', this.note.id);
         }
     }
 }
@@ -87,7 +90,12 @@ let Notes = {
             <a class="notes__new" href="#" @click.prevent="addNote">
                 Create a new note
             </a>
-            <note v-for="note in notes" :note-object="note" :key="note.id"></note>
+            <note
+                v-for="note in notes"
+                :note-object="note"
+                :key="note.id"
+                v-on:deleteNote="deleteNote"
+            ></note>
         </div>
     `,
     methods: {
@@ -95,6 +103,13 @@ let Notes = {
             this.notes.unshift({
                 id: Date.now(),
                 body: ''
+            })
+
+            localStorage.setItem('notes', JSON.stringify(this.notes));
+        },
+        deleteNote (id) {
+            this.notes = this.notes.filter((note) => {
+                return note.id !== id
             })
 
             localStorage.setItem('notes', JSON.stringify(this.notes));
