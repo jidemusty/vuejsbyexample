@@ -37,12 +37,21 @@ let Note = {
             note: this.noteObject
         }
     },
+    computed: {
+        wordCount () {
+            if (!this.note.body.trim()) {
+                return 0
+            }
+
+            return this.note.body.trim().split(' ').length;
+        }
+    },
     template: `
         <div class="note__wrapper">
             <div class="note__header">
                 <a href=# class="note" @click.prevent="open = !open">
                     <span>{{ note.body || 'Empty Note' }}</span>
-                    <span>5 words</span>
+                    <span>{{ wordCount }} words</span>
                 </a>
                 <a v-if="open" href="#" class="note__delete">Delete note</a>
             </div>
