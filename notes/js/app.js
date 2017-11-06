@@ -40,10 +40,12 @@ let Note = {
     computed: {
         wordCount () {
             if (!this.note.body.trim()) {
-                return 0
+                return '0 words';
             }
 
-            return this.note.body.trim().split(' ').length;
+            let wordCount = this.note.body.trim().split(' ').length;
+
+            return wordCount + ' ' + pluralize('word', wordCount);
         }
     },
     template: `
@@ -51,7 +53,7 @@ let Note = {
             <div class="note__header">
                 <a href=# class="note" @click.prevent="open = !open">
                     <span>{{ _.truncate(note.body, { lenght: 30 }) || 'Empty Note' }}</span>
-                    <span>{{ wordCount }} words</span>
+                    <span>{{ wordCount }}</span>
                 </a>
                 <a v-if="open" href="#" class="note__delete" @click.prevent="deleteNote">Delete note</a>
             </div>
