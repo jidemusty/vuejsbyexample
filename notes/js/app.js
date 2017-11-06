@@ -50,7 +50,7 @@ let Note = {
         <div class="note__wrapper">
             <div class="note__header">
                 <a href=# class="note" @click.prevent="open = !open">
-                    <span>{{ note.body || 'Empty Note' }}</span>
+                    <span>{{ _.truncate(note.body, { lenght: 30 }) || 'Empty Note' }}</span>
                     <span>{{ wordCount }} words</span>
                 </a>
                 <a v-if="open" href="#" class="note__delete" @click.prevent="deleteNote">Delete note</a>
