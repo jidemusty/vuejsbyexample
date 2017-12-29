@@ -1,7 +1,7 @@
 let Preview = {
     props: ['text'],
     template: `
-        <div class="editor__preview" v-html="markdownText"></div>
+        <div class="editor__preview" v-html="markdownText">{{ text }}</div>
     `,
     computed: {
         markdownText () {
